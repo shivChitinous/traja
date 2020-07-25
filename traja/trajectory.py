@@ -347,8 +347,8 @@ def distance_between(A: traja.TrajaDataFrame, B: traja.TrajaDataFrame, method="d
             from fastdtw import fastdtw
         except ImportError:
             raise ImportError(
-                """            
-            Missing optional dependency 'fastdtw'. Install fastdtw for dynamic time warping distance with pip install 
+                """
+            Missing optional dependency 'fastdtw'. Install fastdtw for dynamic time warping distance with pip install
             fastdtw.
             """
             )
@@ -510,11 +510,11 @@ def _grid_coords1D(grid_indices: np.ndarray):
 
 def transitions(trj: TrajaDataFrame, **kwargs):
     """Get first-order Markov model for transitions between grid cells.
-    
+
     Args:
         trj (trajectory)
         kwargs: kwargs to :func:`traja.grid_coordinates`
-    
+
     """
     if "xbin" not in trj.columns or "ybin" not in trj.columns:
         grid_indices = grid_coordinates(trj, **kwargs)
@@ -632,16 +632,13 @@ def generate(
         trajectories. Ethology, 124(6), 440-448. https://doi.org/10.1111/eth.12739.
 
     """
-    if seed is None:
-        np.random.seed(0)
-    else:
-        np.random.seed(seed)
+    rn = np.random.RandomState(seed)
     if angular_error_dist is None:
-        angular_error_dist = np.random.normal(
+        angular_error_dist = rn.normal(
             loc=0.0, scale=angular_error_sd, size=n - 1
         )
     if linear_error_dist is None:
-        linear_error_dist = np.random.normal(loc=0.0, scale=linear_error_sd, size=n - 1)
+        linear_error_dist = rn.normal(loc=0.0, scale=linear_error_sd, size=n - 1)
     angular_errors = angular_error_dist
     linear_errors = linear_error_dist
     step_lengths = step_length + linear_errors
@@ -721,20 +718,20 @@ def resample_time(trj: TrajaDataFrame, step_time: str, new_fps: Optional[bool] =
         trj (:class:`~traja.frame.TrajaDataFrame`): Trajectory
 
 
-    .. doctest::  
+    .. doctest::
 
         >>> from traja import generate, resample_time
         >>> df = generate()
         >>> resampled = resample_time(df, '50L') # 50 milliseconds
         >>> resampled.head() # doctest: +NORMALIZE_WHITESPACE
                                          x         y
-        time                                        
+        time
         1970-01-01 00:00:00.000   0.000000  0.000000
         1970-01-01 00:00:00.050   0.999571  4.293384
         1970-01-01 00:00:00.100  -1.298510  5.423373
         1970-01-01 00:00:00.150  -6.056916  4.874502
         1970-01-01 00:00:00.200 -10.347759  2.108385
-        
+
     """
     time_col = _get_time_col(trj)
     if time_col == "index" and is_datetime64_any_dtype(trj.index):
