@@ -87,7 +87,7 @@ def predict(
     model="lstm",
 ):  # pragma: no cover
     """Method for training and visualizing LSTM with trajectory datasets."""
-    if model is "lstm":
+    if model == "lstm":
         from traja.models.nn import TrajectoryLSTM
 
         TrajectoryLSTM(xy, nb_steps=nb_steps, epochs=epochs, batch_size=batch_size)
@@ -137,7 +137,7 @@ def bar_plot(trj: TrajaDataFrame, bins: Union[int, tuple] = None, **kwargs) -> A
 def plot_rolling_hull(trj: TrajaDataFrame, window=100, step=20, areas=False, **kwargs):
     """Plot rolling convex hull of trajectory. If `areas` is True, only
     areas over time is plotted.
-    
+
     """
     hulls = []
 
@@ -255,7 +255,7 @@ def plot_3d(trj: TrajaDataFrame, **kwargs) -> matplotlib.collections.PathCollect
 
     .. note::
         Takes a while to plot large trajectories. Consider using first::
-        
+
             rt = trj.traja.rediscretize(R=1.) # Replace R with appropriate step length
             rt.traja.plot_3d()
 
@@ -445,7 +445,7 @@ def plot(
         else:
             cbar_labels = trj.index[indices].values
         cbar_labels = np.round(cbar_labels, 6)
-        if fps is not None and fps > 0 and fps is not 1 and show_time:
+        if fps is not None and fps > 0 and fps != 1 and show_time:
             cbar_labels = cbar_labels / fps
 
     cbar.set_ticks(indices)
@@ -464,7 +464,7 @@ def plot_periodogram(trj, coord: str = "y", fs: int = 1, interactive: bool = Tru
         coord - choice of 'x' or 'y'
         fs - Sampling frequency
         interactive - Plot immediately
-    
+
     Returns:
         Figure
 
@@ -488,7 +488,7 @@ def plot_autocorrelation(
     interactive: bool = True,
 ):
     """Plot autocorrelation of given coordinate.
-    
+
     Args:
         trj - Trajectory
         coord - 'x' or 'y'
@@ -496,10 +496,10 @@ def plot_autocorrelation(
         sample_rate - sample rate
         xmax - max xaxis value
         interactive - Plot immediately
-    
+
     Returns:
         Matplotlib Figure
-    
+
     """
     from statsmodels import api as sm
 
@@ -1168,10 +1168,10 @@ def plot_transition_graph(
 
     Args:
         data (trajectory or transition_matrix)
-    
-    .. note::        
+
+    .. note::
         Modified from http://www.blackarbs.com/blog/introduction-hidden-markov-models-python-networkx-sklearn/2/9/2017
-    
+
     """
     try:
         import networkx as nx
@@ -1224,7 +1224,7 @@ def plot_transition_matrix(
     **kwargs,
 ) -> matplotlib.image.AxesImage:
     """Plot transition matrix.
-    
+
     Args:
         data (trajectory or square transition matrix)
         interactive (bool): show plot
@@ -1232,7 +1232,7 @@ def plot_transition_matrix(
 
     Returns:
         axesimage (matplotlib.image.AxesImage)
-    
+
     """
     if isinstance(data, np.ndarray):
         if data.shape[0] != data.shape[1]:
